@@ -19,6 +19,11 @@ type Collector struct {
 }
 
 func (c *Collector) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet && r.RequestURI == "/health" {
+		c.response(w, http.StatusOK, "")
+		return
+	}
+
 	if r.RequestURI != "/" {
 		message := fmt.Sprintf("Path \"%s\" not found.", r.RequestURI)
 		c.response(w, http.StatusNotFound, message)
